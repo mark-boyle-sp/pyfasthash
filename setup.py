@@ -135,22 +135,22 @@ c_libraries = [(
             "-std=c++11",
         ],
     }
-), (
-    't1ha', {
-        "sources": list(filter(None, [
-            'src/t1ha/src/t1ha0.c',
-            'src/t1ha/src/t1ha0_ia32aes_avx.c' if IS_X86 else None,
-            'src/t1ha/src/t1ha0_ia32aes_avx2.c' if IS_X86 else None,
-            'src/t1ha/src/t1ha0_ia32aes_noavx.c',
-            'src/t1ha/src/t1ha1.c',
-            'src/t1ha/src/t1ha2.c',
-        ])),
-        "macros": [
-            ("T1HA0_AESNI_AVAILABLE", ON if cpu.aes else OFF),
-            ("T1HA0_RUNTIME_SELECT", ON),
-        ],
-        "cflags": extra_compile_args,
-    }
+# ), (
+#     't1ha', {
+#         "sources": list(filter(None, [
+#             'src/t1ha/src/t1ha0.c',
+#             'src/t1ha/src/t1ha0_ia32aes_avx.c' if IS_X86 else None,
+#             'src/t1ha/src/t1ha0_ia32aes_avx2.c' if IS_X86 else None,
+#             'src/t1ha/src/t1ha0_ia32aes_noavx.c',
+#             'src/t1ha/src/t1ha1.c',
+#             'src/t1ha/src/t1ha2.c',
+#         ])),
+#         "macros": [
+#             ("T1HA0_AESNI_AVAILABLE", ON if cpu.aes else OFF),
+#             ("T1HA0_RUNTIME_SELECT", ON),
+#         ],
+#         "cflags": extra_compile_args,
+#     }
 ), (
     'farm', {
         "sources": ['src/smhasher/farmhash-c.c'],
@@ -193,11 +193,11 @@ if not IS_WINNT:
 
     elif IS_ARM64:
         srcs += ["src/highwayhash/highwayhash/hh_neon.cc"]
-        cflags += [
-            '-mfloat-abi=hard',
-            '-march=armv7-a',
-            '-mfpu=neon',
-        ]
+        # cflags += [
+        #     '-mfloat-abi=hard',
+        #     '-march=armv7-a',
+        #     '-mfpu=neon',
+        # ]
 
     elif IS_PPC64:
         srcs += ["src/highwayhash/highwayhash/hh_vsx.cc"]
