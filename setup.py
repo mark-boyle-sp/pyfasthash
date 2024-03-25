@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import sys
 import os
 import platform
@@ -100,7 +99,14 @@ elif IS_POSIX:
     else:
         libraries += ["rt", "gcc"]
 
-    extra_compile_args += ["-march=native"]
+    if IS_ARM:
+        extra_compile_args += ["-march=armv8.2-a+simd+crypto+dotprod+ssbs+rcpc"]
+
+    elif IS_X86:
+        extra_compile_args += ["-msse4.1", "-mavx2"]
+
+    else:
+        extra_compile_args += ["-march=native"]
 
 if SUPPORT_INT128:
     macros += [
