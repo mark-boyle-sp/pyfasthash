@@ -65,6 +65,7 @@ libraries = []
 extra_macros = []
 extra_compile_args = []
 extra_link_args = []
+default_cflags = []
 
 if IS_WINNT:
     macros += [
@@ -100,13 +101,15 @@ elif IS_POSIX:
         libraries += ["rt", "gcc"]
 
     if IS_ARM:
-        extra_compile_args += ["-march=armv8.2-a+simd+crypto+dotprod+ssbs+rcpc"]
+        default_cflags += ["-march=armv8.2-a+simd+crypto+dotprod+ssbs+rcpc"]
 
     elif IS_X86:
-        extra_compile_args += ["-msse4.1", "-mavx2"]
+        default_cflags += ["-march=x86-64-v3"]
 
     else:
-        extra_compile_args += ["-march=native"]
+        default_cflags += ["-march=native"]
+
+    extra_compile_args += default_cflags
 
 if SUPPORT_INT128:
     macros += [
@@ -145,20 +148,24 @@ c_libraries = [(
     'farm', {
         "sources": ['src/smhasher/farmhash-c.c'],
         "macros": extra_macros,
+        "cflags": default_cflags,
     }
 ), (
     'lookup3', {
         "sources": ['src/lookup3/lookup3.c'],
         "macros": extra_macros,
+        "cflags": default_cflags,
     }
 ), (
     'SuperFastHash', {
         "sources": ['src/SuperFastHash/SuperFastHash.c'],
         "macros": extra_macros,
+        "cflags": default_cflags,
     }
 ), (
     "xxhash", {
         "sources": ["src/xxHash/xxhash.c"],
+        "cflags": default_cflags,
     }
 )]
 
@@ -179,15 +186,9 @@ if not IS_WINNT:
             "src/highwayhash/highwayhash/hh_sse41.cc",
             "src/highwayhash/highwayhash/hh_avx2.cc",
         ]
-        cflags += ["-msse4.1", "-mavx2"]
 
     elif IS_ARM64:
         srcs += ["src/highwayhash/highwayhash/hh_neon.cc"]
-        # cflags += [
-        #     '-mfloat-abi=hard',
-        #     '-march=armv7-a',
-        #     '-mfpu=neon',
-        # ]
 
     elif IS_PPC64:
         srcs += ["src/highwayhash/highwayhash/hh_vsx.cc"]
