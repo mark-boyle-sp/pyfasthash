@@ -4,5 +4,4 @@ ignore:
   - "src/lookup3"
   - "src/smhasher"
   - "src/SuperFastHash"
-  - "src/t1ha"
   - "src/xxHash"
