@@ -16,6 +16,12 @@ PYBIND11_MODULE(_pyhash, m)
 {
   m.doc() = "Python Non-cryptographic Hash Library";
 
+#if defined(__ARM_NEON) && defined(__ARM_NEON__) && defined(__aarch64__)
+  m.attr("build_with_neon") = true;
+#else
+  m.attr("build_with_neon") = false;
+#endif
+
 #if defined(__SSE4_2__) && defined(__x86_64__)
   m.attr("build_with_sse42") = true;
 #else
@@ -70,11 +76,11 @@ PYBIND11_MODULE(_pyhash, m)
 
   city_hash_32_t::Export(m, "city_32");
   city_hash_64_t::Export(m, "city_64");
-// #ifdef SUPPORT_INT128
-//   city_hash_128_t::Export(m, "city_128");
-//   city_hash_crc_128_t::Export(m, "city_crc_128");
-//   city_fingerprint_256_t::Export(m, "city_fingerprint_256");
-// #endif
+#ifdef SUPPORT_INT128
+  city_hash_128_t::Export(m, "city_128");
+  city_hash_crc_128_t::Export(m, "city_crc_128");
+  city_fingerprint_256_t::Export(m, "city_fingerprint_256");
+#endif
 
   spooky_hash_v1_32_t::Export(m, "spooky_v1_32");
   spooky_hash_v1_64_t::Export(m, "spooky_v1_64");

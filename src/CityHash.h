@@ -15,10 +15,6 @@ https://code.google.com/p/cityhash/
 template <typename T>
 struct city_hash_t : public Hasher<city_hash_t<T>, T>
 {
-#if defined(__SSE4_2__) && defined(__x86_64__)
-	static bool has_sse4_2;
-#endif
-
   public:
 	typedef Hasher<city_hash_t<T>, T> __hasher_t;
 	typedef typename __hasher_t::hash_value_t hash_value_t;
@@ -28,42 +24,6 @@ struct city_hash_t : public Hasher<city_hash_t<T>, T>
 
 	const hash_value_t operator()(void *buf, size_t len, seed_value_t seed) const;
 };
-
-#if defined(__SSE4_2__) && defined(__x86_64__)
-
-bool support_sse4_2(void)
-{
-	unsigned cpuinfo[4] = {0};
-	unsigned infotype = 1;
-
-#ifdef _MSC_VER
-	__cpuid(cpuinfo, infotype);
-#else // _MSC_VER
-// cpuid and PIC mode don't play nice. Push ebx before use!
-// see http://www.technovelty.org/code/arch/pic-cas.html
-#ifdef __x86_64__
-	__asm__ __volatile__(
-		"cpuid;"
-		: "=a"(cpuinfo[0]), "=b"(cpuinfo[1]), "=c"(cpuinfo[2]), "=d"(cpuinfo[3])
-		: "a"(infotype));
-#else  // __x86_64__
-	__asm__ __volatile__(
-		"pushl %%ebx;"
-		"cpuid;"
-		"movl %%ebx,%1;"
-		"pop %%ebx;"
-		: "=a"(cpuinfo[0]), "=m"(cpuinfo[1]), "=c"(cpuinfo[2]), "=d"(cpuinfo[3])
-		: "a"(infotype));
-#endif // __x86_64__
-#endif // _MSC_VER
-
-	return cpuinfo[2] & (1 << 20);
-}
-
-template <typename T>
-bool city_hash_t<T>::has_sse4_2 = support_sse4_2();
-
-#endif
 
 typedef city_hash_t<uint32_t> city_hash_32_t;
 typedef city_hash_t<uint64_t> city_hash_64_t;
@@ -95,23 +55,20 @@ const city_hash_64_t::hash_value_t city_hash_64_t::operator()(void *buf, size_t 
 template <>
 const city_hash_128_t::hash_value_t city_hash_128_t::operator()(void *buf, size_t len, city_hash_128_t::seed_value_t seed) const
 {
-#if defined(__SSE4_2__) && defined(__x86_64__)
-	if (has_sse4_2)
+#ifdef CITY_HASH_SSE_INCLUDE
+	if (seed)
 	{
-		if (seed)
-		{
-			const uint128 &hash = CityHashCrc128WithSeed((const char *)buf, len, std::make_pair(U128_LO(seed), U128_HI(seed)));
+		const uint128 &hash = CityHashCrc128WithSeed((const char *)buf, len, std::make_pair(U128_LO(seed), U128_HI(seed)));
 
-			return *(uint128_t *)&hash;
-		}
-		else
-		{
-			const uint128 &hash = CityHashCrc128((const char *)buf, len);
-
-			return *(uint128_t *)&hash;
-		}
+		return *(uint128_t *)&hash;
 	}
-#endif
+	else
+	{
+		const uint128 &hash = CityHashCrc128((const char *)buf, len);
+
+		return *(uint128_t *)&hash;
+	}
+#else
 
 	if (seed)
 	{
@@ -125,9 +82,11 @@ const city_hash_128_t::hash_value_t city_hash_128_t::operator()(void *buf, size_
 
 		return *(uint128_t *)&hash;
 	}
+
+#endif // CITY_HASH_SSE_INCLUDE
 }
 
-#if defined(__SSE4_2__) && defined(__x86_64__)
+#ifdef CITY_HASH_SSE_INCLUDE
 
 template <typename T>
 struct city_hash_crc_t : public Hasher<city_hash_crc_t<T>, T>
@@ -184,6 +143,6 @@ const city_fingerprint_256_t::fingerprint_value_t city_fingerprint_256_t::operat
 	return result;
 }
 
-#endif // defined(__SSE4_2__) && defined(__x86_64__)
+#endif // CITY_HASH_SSE_INCLUDE
 
 #endif // SUPPORT_INT128

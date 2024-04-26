@@ -32,6 +32,7 @@ _GCC_VER = _pyhash.__dict__.get('_GCC_VER')
 _CLANG_VER = _pyhash.__dict__.get('_CLANG_VER')
 __VERSION__ = _pyhash.__dict__.get('__VERSION__')
 
+build_with_neon = _pyhash.build_with_neon
 build_with_sse42 = _pyhash.build_with_sse42
 build_with_int128 = _pyhash.build_with_int128
 
