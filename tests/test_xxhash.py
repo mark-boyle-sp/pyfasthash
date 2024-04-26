@@ -25,6 +25,7 @@ def test_xx_128(hash_tester):
                 unicode_hash=178697977782819640141202674788096098003)
 
 
+@pytest.mark.filterwarnings("ignore::pyhash.UnstableWarning")
 def test_xxh3_64(hash_tester):
     hash_tester(hasher_type=pyhash.xxh3_64,
                 bytes_hash=11441948532827618368,
@@ -32,6 +33,7 @@ def test_xxh3_64(hash_tester):
                 unicode_hash=16570491819903731716)
 
 
+@pytest.mark.filterwarnings("ignore::pyhash.UnstableWarning")
 @pytest.mark.skipif(not pyhash.build_with_int128, reason="requires int128 support")
 def test_xxh3_128(hash_tester):
     hash_tester(hasher_type=pyhash.xxh3_128,
@@ -55,11 +57,13 @@ def test_xx_hash128_perf(benchmark, hash_bencher):
     hash_bencher(benchmark, pyhash.xx_128, 321635069348597727998765129269811424625)
 
 
+@pytest.mark.filterwarnings("ignore::pyhash.UnstableWarning")
 @pytest.mark.benchmark(group='hash64', disable_gc=True)
 def test_xxh3_hash64_perf(benchmark, hash_bencher):
     hash_bencher(benchmark, pyhash.xxh3_64, 10666956326096416113)
 
 
+@pytest.mark.filterwarnings("ignore::pyhash.UnstableWarning")
 @pytest.mark.skipif(not pyhash.build_with_int128, reason="requires int128 support")
 @pytest.mark.benchmark(group='hash128', disable_gc=True)
 def test_xxh3_hash128_perf(benchmark, hash_bencher):

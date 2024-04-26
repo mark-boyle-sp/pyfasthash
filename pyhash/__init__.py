@@ -1,11 +1,29 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-import sys
+import functools
 import inspect
+import sys
+import warnings
 
 import _pyhash
+
+
+class UnstableWarning (UserWarning):
+    pass
+
+
+def unstable(method):
+    if method is None:
+        return None
+
+    warn_msg = UnstableWarning(
+        method.__name__ + " is unstable and may change results in the future"
+    )
+
+    @functools.wraps(method)
+    def warn_on_build(*args, **kwargs):
+        warnings.warn(warn_msg, stacklevel=2)
+        return method(*args, **kwargs)
+
+    return warn_on_build
 
 __is_little_endian__ = sys.byteorder == 'little'
 
@@ -80,8 +98,8 @@ mum_64 = _pyhash.mum_64
 xx_32 = _pyhash.xx_32
 xx_64 = _pyhash.xx_64
 xx_128 = _pyhash.__dict__.get('xx_128')
-xxh3_64 = _pyhash.xxh3_64
-xxh3_128 = _pyhash.__dict__.get('xxh3_128')
+xxh3_64 = unstable(_pyhash.xxh3_64)
+xxh3_128 = unstable(_pyhash.__dict__.get('xxh3_128'))
 
 highway_64 = _pyhash.__dict__.get('highway_64')
 highway_128 = _pyhash.__dict__.get('highway_128')
