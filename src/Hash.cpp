@@ -9,7 +9,6 @@
 #include "FarmHash.h"
 #include "MetroHash.h"
 #include "Mum.h"
-// #include "T1ha.h"
 #include "xxHash.h"
 #include "Highway.h"
 
@@ -127,6 +126,9 @@ PYBIND11_MODULE(_pyhash, m)
 
   xx_hash_32_t::Export(m, "xx_32");
   xx_hash_64_t::Export(m, "xx_64");
+#ifdef SUPPORT_INT128
+  xx_hash_128_t::Export(m, "xx_128");
+#endif
 
   xxh3_hash_64_t::Export(m, "xxh3_64");
 #ifdef SUPPORT_INT128

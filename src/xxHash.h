@@ -22,6 +22,10 @@ public:
 typedef xx_hash_t<uint32_t> xx_hash_32_t;
 typedef xx_hash_t<uint64_t> xx_hash_64_t;
 
+#ifdef SUPPORT_INT128
+typedef xx_hash_t<uint128_t> xx_hash_128_t;
+#endif
+
 template <>
 const xx_hash_32_t::hash_value_t xx_hash_32_t::operator()(void *buf, size_t len, xx_hash_32_t::seed_value_t seed) const
 {
@@ -32,6 +36,16 @@ const xx_hash_64_t::hash_value_t xx_hash_64_t::operator()(void *buf, size_t len,
 {
   return XXH64(buf, len, seed);
 }
+
+#ifdef SUPPORT_INT128
+template <>
+const xx_hash_128_t::hash_value_t xx_hash_128_t::operator()(void *buf, size_t len, xx_hash_128_t::seed_value_t seed) const
+{
+  XXH128_hash_t hash = XXH128(buf, len, seed);
+
+  return U128_NEW(hash.low64, hash.high64);
+}
+#endif
 
 template <typename T>
 class xxh3_hash_t : public Hasher<xxh3_hash_t<T>, T>
