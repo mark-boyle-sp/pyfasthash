@@ -116,14 +116,6 @@ PYBIND11_MODULE(_pyhash, m)
 
   mum_hash_64_t::Export(m, "mum_64");
 
-//   t1ha2_atonce_t::Export(m, "t1ha2_atonce");
-// #ifdef SUPPORT_INT128
-//   t1ha2_atonce128_t::Export(m, "t1ha2_atonce128");
-// #endif
-//   t1ha1_le_t::Export(m, "t1ha1_le");
-//   t1ha1_be_t::Export(m, "t1ha1_be");
-//   t1ha0_t::Export(m, "t1ha0");
-
   xx_hash_32_t::Export(m, "xx_32");
   xx_hash_64_t::Export(m, "xx_64");
 #ifdef SUPPORT_INT128

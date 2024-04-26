@@ -2,8 +2,8 @@
 
 #include "Hash.h"
 
-#include "highwayhash/highwayhash/highwayhash_target.h"
-#include "highwayhash/highwayhash/instruction_sets.h"
+#include "thirdparty/highwayhash/highwayhash/highwayhash_target.h"
+#include "thirdparty/highwayhash/highwayhash/instruction_sets.h"
 
 #ifdef SUPPORT_INT128
 

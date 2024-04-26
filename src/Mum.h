@@ -2,7 +2,7 @@
 
 #include "Hash.h"
 
-#include "smhasher/mum.h"
+#include "thirdparty/smhasher/mum.h"
 
 template <typename T>
 class mum_hash_t : public Hasher<mum_hash_t<T>, T>

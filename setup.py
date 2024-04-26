@@ -57,8 +57,8 @@ cpu = cpu_features()
 
 macros = []
 include_dirs = [
-    "src/pybind11/include",
-    "src/highwayhash",
+    "src/thirdparty/pybind11/include",
+    "src/thirdparty/highwayhash",
 ]
 library_dirs = []
 libraries = []
@@ -119,26 +119,26 @@ if SUPPORT_INT128:
 c_libraries = [(
     'fnv', {
         "sources": [
-            'src/fnv/hash_32.c',
-            'src/fnv/hash_32a.c',
-            'src/fnv/hash_64.c',
-            'src/fnv/hash_64a.c'
+            'src/thirdparty/fnv/hash_32.c',
+            'src/thirdparty/fnv/hash_32a.c',
+            'src/thirdparty/fnv/hash_64.c',
+            'src/thirdparty/fnv/hash_64a.c'
         ],
         "macros": extra_macros,
     }
 ), (
     'smhasher', {
         "sources": list(filter(None, [
-            'src/smhasher/MurmurHash1.cpp',
-            'src/smhasher/MurmurHash2.cpp',
-            'src/smhasher/MurmurHash3.cpp',
-            'src/smhasher/City.cpp',
-            'src/smhasher/Spooky.cpp',
-            'src/smhasher/SpookyV2.cpp',
-            'src/smhasher/metrohash/metrohash64.cpp',
-            'src/smhasher/metrohash/metrohash64crc.cpp' if IS_X86 or IS_ARM64 else None,
-            'src/smhasher/metrohash/metrohash128.cpp',
-            'src/smhasher/metrohash/metrohash128crc.cpp' if IS_X86 or IS_ARM64 else None,
+            'src/thirdparty/smhasher/MurmurHash1.cpp',
+            'src/thirdparty/smhasher/MurmurHash2.cpp',
+            'src/thirdparty/smhasher/MurmurHash3.cpp',
+            'src/thirdparty/smhasher/City.cpp',
+            'src/thirdparty/smhasher/Spooky.cpp',
+            'src/thirdparty/smhasher/SpookyV2.cpp',
+            'src/thirdparty/smhasher/metrohash/metrohash64.cpp',
+            'src/thirdparty/smhasher/metrohash/metrohash64crc.cpp' if IS_X86 or IS_ARM64 else None,
+            'src/thirdparty/smhasher/metrohash/metrohash128.cpp',
+            'src/thirdparty/smhasher/metrohash/metrohash128crc.cpp' if IS_X86 or IS_ARM64 else None,
         ])),
         "cflags": extra_compile_args + [
             "-std=c++11",
@@ -146,52 +146,52 @@ c_libraries = [(
     }
 ), (
     'farm', {
-        "sources": ['src/smhasher/farmhash-c.c'],
+        "sources": ['src/thirdparty/smhasher/farmhash-c.c'],
         "macros": extra_macros,
         "cflags": default_cflags,
     }
 ), (
     'lookup3', {
-        "sources": ['src/lookup3/lookup3.c'],
+        "sources": ['src/thirdparty/lookup3/lookup3.c'],
         "macros": extra_macros,
         "cflags": default_cflags,
     }
 ), (
     'SuperFastHash', {
-        "sources": ['src/SuperFastHash/SuperFastHash.c'],
+        "sources": ['src/thirdparty/SuperFastHash/SuperFastHash.c'],
         "macros": extra_macros,
         "cflags": default_cflags,
     }
 ), (
     "xxhash", {
-        "sources": ["src/xxHash/xxhash.c"],
+        "sources": ["src/thirdparty/xxHash/xxhash.c"],
         "cflags": default_cflags,
     }
 )]
 
 if not IS_WINNT:
     srcs = [
-        "src/highwayhash/highwayhash/arch_specific.cc",
-        "src/highwayhash/highwayhash/instruction_sets.cc",
-        "src/highwayhash/highwayhash/os_specific.cc",
-        "src/highwayhash/highwayhash/hh_portable.cc",
+        "src/thirdparty/highwayhash/highwayhash/arch_specific.cc",
+        "src/thirdparty/highwayhash/highwayhash/instruction_sets.cc",
+        "src/thirdparty/highwayhash/highwayhash/os_specific.cc",
+        "src/thirdparty/highwayhash/highwayhash/hh_portable.cc",
     ]
     cflags = extra_compile_args + [
-        "-Isrc/highwayhash",
+        "-Isrc/thirdparty/highwayhash",
         "-std=c++11",
     ]
 
     if IS_X86_64:
         srcs += [
-            "src/highwayhash/highwayhash/hh_sse41.cc",
-            "src/highwayhash/highwayhash/hh_avx2.cc",
+            "src/thirdparty/highwayhash/highwayhash/hh_sse41.cc",
+            "src/thirdparty/highwayhash/highwayhash/hh_avx2.cc",
         ]
 
     elif IS_ARM64:
-        srcs += ["src/highwayhash/highwayhash/hh_neon.cc"]
+        srcs += ["src/thirdparty/highwayhash/highwayhash/hh_neon.cc"]
 
     elif IS_PPC64:
-        srcs += ["src/highwayhash/highwayhash/hh_vsx.cc"]
+        srcs += ["src/thirdparty/highwayhash/highwayhash/hh_vsx.cc"]
         cflags += ['-mvsx']
 
     c_libraries += [(

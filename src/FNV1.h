@@ -2,7 +2,7 @@
 
 #include "Hash.h"
 
-#include "fnv/fnv.h"
+#include "thirdparty/fnv/fnv.h"
 
 /**
  * FNV hashes are designed to be fast while maintaining a low collision rate.

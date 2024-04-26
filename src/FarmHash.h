@@ -2,7 +2,7 @@
 
 #include "Hash.h"
 
-#include "smhasher/farmhash-c.h"
+#include "thirdparty/smhasher/farmhash-c.h"
 
 /**
 

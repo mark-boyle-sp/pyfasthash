@@ -2,7 +2,7 @@
 
 #include "Hash.h"
 
-#include "smhasher/Spooky.h"
+#include "thirdparty/smhasher/Spooky.h"
 
 /**
 

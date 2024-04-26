@@ -2,9 +2,9 @@
 
 #include "Hash.h"
 
-#include "smhasher/MurmurHash1.h"
-#include "smhasher/MurmurHash2.h"
-#include "smhasher/MurmurHash3.h"
+#include "thirdparty/smhasher/MurmurHash1.h"
+#include "thirdparty/smhasher/MurmurHash2.h"
+#include "thirdparty/smhasher/MurmurHash3.h"
 
 /**
  * http://code.google.com/p/smhasher/
