@@ -104,7 +104,16 @@ elif IS_POSIX:
         default_cflags += ["-march=armv8.2-a+simd+crypto+dotprod+ssbs+rcpc"]
 
     elif IS_X86:
-        default_cflags += ["-march=x86-64-v3"]
+        default_cflags += [
+            "-march=x86-64-v3",
+            "-mbmi",
+            "-mbmi2",
+            "-maes",
+            "-mfma",
+            "-mlzcnt",
+            "-mpopcnt",
+            "-mpclmul"
+        ]
 
     else:
         default_cflags += ["-march=native"]
